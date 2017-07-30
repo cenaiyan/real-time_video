@@ -1,0 +1,41 @@
+cmake_minimum_required(VERSION 2.8)
+project(REAL_TIME)
+set(tmp_dir "")
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/)
+SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/libs/)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+#===============================add boost libs and head========================
+find_package(Boost REQUIRED COMPONENTS thread system locale system filesystem)
+#===============================add opencv libs and head=======================
+find_package(OpenCV REQUIRED)
+#===============================set ffmpeg dirs================================
+set(FFMPEG_INCLUDE_DIRS "/usr/local/ffmpeg/include")
+set(FFMPEG_LIB_DIRS "/usr/local/ffmpeg/lib")
+set(FFMPEG_LIBRARIES avutil avcodec avformat swscale)
+#============================include the root dir==============================
+include_directories(${PROJECT_SOURCE_DIR}/include)
+#============================include the sub dirs of header files=============
+file(GLOB_RECURSE H_LIST "*.h*")
+foreach(hf ${H_LIST})
+	message("hf is ${hf}")
+	get_filename_component(fileName ${hf} NAME_WE)
+	get_filename_component(path ${hf} PATH)
+	get_filename_component(folder ${path} NAME_WE)
+	list(FIND tmp_dir "${folder}" idx)
+	if(idx EQUAL -1)
+		list(APPEND tmp_dir "${folder}")
+		include_directories(${PROJECT_SOURCE_DIR}/include/${folder})
+		message("${PROJECT_SOURCE_DIR}/include/${folder}")
+		#message("***********tmp_dir is ${tmp_dir}")
+	endif()
+
+endforeach(hf)	
+#============================include  ffmpeg opencv ===============================
+include_directories(${FFMPEG_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
+link_directories(${FFMPEG_LIB_DIRS})
+#link_directories(${PROJECT_SOURCE_DIR}/build/libs/)
+list(APPEND libs_list ${FFMPEG_LIBRARIES}  ${Boost_LIBRARIES} ${OpenCV_LIBRARIES})
+#message("xxxxxxxxxxxlibs_list is ${libs_list}")
+add_subdirectory(src)
+message("xxxxxxxxxxxlibs_list is ${libs_list}")
+add_subdirectory(test)

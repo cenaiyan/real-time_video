@@ -1,0 +1,5 @@
+file(GLOB_RECURSE CPP_LIST "*.c*")
+add_library(rtpH264 STATIC ${CPP_LIST})
+target_link_libraries(rtpH264 ${libs_list})
+list(INSERT libs_list 0 rtpH264)
+set(libs_list ${libs_list} PARENT_SCOPE)

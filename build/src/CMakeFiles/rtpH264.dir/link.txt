@@ -1,0 +1,2 @@
+/usr/bin/ar qc ../libs/librtpH264.a  CMakeFiles/rtpH264.dir/NetSource.cpp.o CMakeFiles/rtpH264.dir/DecodeUtil.cpp.o CMakeFiles/rtpH264.dir/rtpH264Protocol.cpp.o
+/usr/bin/ranlib ../libs/librtpH264.a

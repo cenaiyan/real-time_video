@@ -1,0 +1,12 @@
+file(GLOB_RECURSE cppList "*.c*")
+set(projecList "")
+foreach(cpFile ${cppList})
+	get_filename_component(name ${cpFile} NAME_WE)
+	list(FIND projecList "${name}" idx)
+	if(idx EQUAL -1)
+		list(APPEND projectList ${name})
+		add_executable(${name} ${cpFile})
+		target_link_libraries(${name} ${libs_list})
+	endif()
+
+endforeach(cpFile)
